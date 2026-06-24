@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import CreateRoomPage from "./CreateRoomPage";
 import Grid from "@mui/material/Grid";
 import { API_BASE_URL } from "../config";
+import MusicPlayer from "./MusicPlayer";
 
 
 function RoomPage(){
@@ -14,6 +15,7 @@ function RoomPage(){
     const [isHost, setIsHost] = useState(false);
     const [showSettings,setShowSettings] = useState(false);
     const [spotifyAuthenticated,setSpotifyAuthenticated] = useState(false);
+    const [song,setSong] = useState({});
 
 
     const {roomCode} = useParams();
@@ -53,6 +55,11 @@ function RoomPage(){
         };
         useEffect(() => {
         getRoomDetails();
+        const interval = setInterval(() => {
+        getCurrentSong();
+        }, 1000);
+
+        return () => clearInterval(interval);
     }, []);
 
     const leaveButton=async()=>{
@@ -87,6 +94,18 @@ function RoomPage(){
         }
     }
 
+    const getCurrentSong = async()=>{
+        const requestOptions={
+            credentials: "include",
+        };
+        const response = await fetch(`${API_BASE_URL}/spotify/current-song`,requestOptions);
+        if(!response.ok){
+            return;
+        }
+        const data = await response.json();
+        setSong(data);
+    }
+
     if(showSettings){
         return(
             <Grid container spacing={1}>
@@ -109,6 +128,7 @@ function RoomPage(){
         <Box sx={{maxWidth:800, mx:40,mt:10,border:'1px dashed green',height:200}}>
         <div>
             <h3>Room code : {roomCode}</h3>
+            <MusicPlayer {...song} />
             <p>Votes to Skip : {votesToSkip}</p>
             <p>
                 Guest Can Pause : {guestCanPause.toString()}
