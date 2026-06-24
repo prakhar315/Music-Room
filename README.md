@@ -1,4 +1,4 @@
-# Music Controller
+# Music Room
 
 Collaborative Spotify music controller web app. Host creates a room, guests join and vote to skip songs.
 
