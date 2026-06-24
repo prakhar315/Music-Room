@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import {Link, Navigate, useNavigate} from "react-router-dom"
 import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
+import { API_BASE_URL } from '../config';
 
 
 function HomePage(){
@@ -12,7 +13,7 @@ function HomePage(){
 
     useEffect(()=>{
         const getUserRoom = async() =>{           
-            const response = await fetch("http://localhost:8000/user-in-room",{credentials:'include'},);
+            const response = await fetch(`${API_BASE_URL}/user-in-room`,{credentials:'include'},);
             const data = await response.json();
             setRoomCode(data.code);
             if(data.code !=null ){

@@ -10,7 +10,6 @@ import { API_BASE_URL } from "../config";
 
 
 function RoomJoinPage(){
-    console.log(API_BASE_URL);
     const [roomCode,setRoomCode] = useState("");
     const [error,setError] = useState("");
     const navigate = useNavigate();

@@ -41,14 +41,11 @@ function CreateRoomPage(props){
         const requestOptions = {
             method: "POST",
             headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({vote_to_skip: votesToSkip, guest_can_pause: guestCanPause,}),   
+            body: JSON.stringify({vote_to_skip: votesToSkip, guest_can_pause: guestCanPause,}),
+            credentials:"include",
         };
         try{
-            const response = await fetch(`${API_BASE_URL}/create-room`, {
-                ...requestOptions,
-                credentials: "include",
-            },
-        )
+            const response = await fetch(`${API_BASE_URL}/create-room`,requestOptions)
             const data = await response.json();
             console.log(data);
             navigate("/room/" + data.code);

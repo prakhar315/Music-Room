@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'api_controller',
     'rest_framework',
     'corsheaders',
+    'spotify',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
+# Session Configuration
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True

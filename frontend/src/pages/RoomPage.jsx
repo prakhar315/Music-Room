@@ -13,6 +13,7 @@ function RoomPage(){
     const [guestCanPause, setGuestCanPause] = useState(false)
     const [isHost, setIsHost] = useState(false);
     const [showSettings,setShowSettings] = useState(false);
+    const [spotifyAuthenticated,setSpotifyAuthenticated] = useState(false);
 
 
     const {roomCode} = useParams();
@@ -36,9 +37,14 @@ function RoomPage(){
                     navigate("/");
                 }else{
                 const data = await response.json();               
-                setVotesToSkip(data.vote_to_skip)
-                setGuestCanPause(data.guest_can_pause)
-                setIsHost(data.is_host)
+                setVotesToSkip(data.vote_to_skip);
+                setGuestCanPause(data.guest_can_pause);
+                setIsHost(data.is_host);
+
+                if(data.is_host){
+                authenticateSpotify();
+                }
+
                 }
                 
             } catch(error){
@@ -64,6 +70,22 @@ function RoomPage(){
             console.error(error)
         }
     };
+
+    const authenticateSpotify = async()=>{
+        const requestOptions={
+            method:"GET",
+            credentials:"include",
+        };
+        const response = await fetch(`${API_BASE_URL}/spotify/is-authenticated`,requestOptions);
+        const data = await response.json();
+        setSpotifyAuthenticated(data.status);
+
+        if(!data.status){
+            const authResponse = await fetch(`${API_BASE_URL}/spotify/get-auth-url`,requestOptions);
+            const authData = await authResponse.json();
+            window.location.replace(authData.url);
+        }
+    }
 
     if(showSettings){
         return(
