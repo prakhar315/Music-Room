@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api_controller.urls')),
     path('spotify/', include('spotify.urls')),
+    
 ]

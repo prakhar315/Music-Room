@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +46,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'spotify',
+    'channels',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -75,7 +78,9 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = "music_controller.asgi.application"
 WSGI_APPLICATION = 'music_controller.wsgi.application'
+
 
 
 # Database
