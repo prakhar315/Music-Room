@@ -139,3 +139,11 @@ CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
+
+#channel layer config
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
