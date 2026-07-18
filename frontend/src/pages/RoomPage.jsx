@@ -1,11 +1,12 @@
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState,useEffect,useRef} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CreateRoomPage from "./CreateRoomPage";
 import Grid from "@mui/material/Grid";
 import { API_BASE_URL } from "../config";
+import { WS_BASE_URL } from "../config";
 import MusicPlayer from "./MusicPlayer";
 
 
@@ -16,6 +17,10 @@ function RoomPage(){
     const [showSettings,setShowSettings] = useState(false);
     const [spotifyAuthenticated,setSpotifyAuthenticated] = useState(false);
     const [song,setSong] = useState({});
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState("");
+
+    const socketRef = useRef(null);
 
 
     const {roomCode} = useParams();
@@ -55,11 +60,28 @@ function RoomPage(){
         };
         useEffect(() => {
         getRoomDetails();
+        
+        socketRef.current = new WebSocket(`${WS_BASE_URL}/ws/chat/${roomCode}/`);
+        socketRef.current.onopen = ()=>{
+            console.log("Websocket conneted");
+        };
+        socketRef.current.onclose = ()=>{
+            console.log("Websocket Disconnected");
+        };
+        socketRef.current.onmessage = (e) =>{
+            const data = JSON.parse(e.data);
+            console.log(data);
+        };
+
+
         const interval = setInterval(() => {
         getCurrentSong();
         }, 1000);
 
-        return () => clearInterval(interval);
+        return () => {
+            socketRef.current.close();
+            clearInterval(interval);
+        }
     }, []);
 
     const leaveButton=async()=>{

@@ -158,9 +158,9 @@ react-django/
 | GET | `/spotify/redirect` | Auth callback |
 | GET | `/spotify/is-authenticated` | Check auth status |
 | GET | `/spotify/current-song` | Get playing song |
-| PUT | `/spotify/pause-song` | Pause playback |
-| PUT | `/spotify/play-song` | Resume playback |
-| POST | `/spotify/skip-song` | Skip to next song |
+| PUT | `/spotify/pause` | Pause playback |
+| PUT | `/spotify/play` | Resume playback |
+| POST | `/spotify/skip` | Skip to next song |
 
 ---
 
@@ -236,11 +236,9 @@ Get Spotify credentials from: https://developer.spotify.com/dashboard
 
 ## Features Planned
 
-- [ ] Song queue/playlist view
-- [ ] User profiles
-- [ ] Room history
-- [ ] Better error handling
-- [ ] Token refresh automation
+- [ ] Chat Room
+- [ ] Youtube Watch Together
+
 
 ---
 

@@ -5,7 +5,10 @@ import json
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.room_group_name = "chat_room"
+
+        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+        self.room_group_name = self.room_name
+
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
@@ -45,7 +48,11 @@ class ChatConsumer(WebsocketConsumer):
         
 
     def disconnect(self, close_code):
-        print(f"Connection closed")
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name,
+            self.channel_name,
+        )
+        print(f"Connection Closed")
         print(f"Close code:{close_code}")
         
         

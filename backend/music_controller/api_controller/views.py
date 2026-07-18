@@ -74,6 +74,7 @@ class CreateRoomView(APIView):
             else:
                 room = Room(host=host,guest_can_pause=guest_can_pause,vote_to_skip=vote_to_skip)
                 room.save()
+                self.request.session['room_code'] = room.code
                 return Response(RoomSerializer(room).data,status=status.HTTP_201_CREATED)
         
         return Response({'Bad Request':'Invalid data...'},status=status.HTTP_400_BAD_REQUEST)
