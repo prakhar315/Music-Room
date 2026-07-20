@@ -11,6 +11,7 @@ import MusicPlayer from "./MusicPlayer";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 
 
 
@@ -76,7 +77,7 @@ function RoomPage(){
             const data = JSON.parse(e.data);
             setMessages((prevMessages)=>[
                 ...prevMessages,
-                data.messages,
+                data.message,
             ]);
         };
 
@@ -128,6 +129,9 @@ function RoomPage(){
             credentials: "include",
         };
         const response = await fetch(`${API_BASE_URL}/spotify/current-song`,requestOptions);
+        if(response.status ===204){
+            return;
+        }
         if(!response.ok){
             return;
         }
@@ -146,7 +150,8 @@ function RoomPage(){
                 message:message,
             })
         );
-    }
+        setMessage("");
+    };
 
     if(showSettings){
         return(
@@ -185,7 +190,8 @@ function RoomPage(){
             </Stack>     
         </Stack>
         </Paper>
-        <Paper elevation={3} sx={{mt: 3,p: 3,borderRadius: 3,}}>
+
+        <Paper elevation={3} sx={{mt: 3,p: 3,borderRadius: 3,}}>    
         <Typography variant="h5">
         Let's Chat
         </Typography>
@@ -197,6 +203,15 @@ function RoomPage(){
             ))}
 
         </Paper>
+        <Stack direction="row" spacing={2}>
+        <TextField 
+        fullWidth placeholder="Type..." value={message} onChange={(e)=> setMessage(e.target.value)}
+        />
+        <Button variant="contained" onClick={sendMessage}>send</Button>
+
+        
+        </Stack>
+
         </Paper>
         </Box>
     )
