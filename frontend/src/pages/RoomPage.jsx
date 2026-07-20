@@ -8,6 +8,10 @@ import Grid from "@mui/material/Grid";
 import { API_BASE_URL } from "../config";
 import { WS_BASE_URL } from "../config";
 import MusicPlayer from "./MusicPlayer";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 
 
 function RoomPage(){
@@ -70,7 +74,10 @@ function RoomPage(){
         };
         socketRef.current.onmessage = (e) =>{
             const data = JSON.parse(e.data);
-            console.log(data);
+            setMessages((prevMessages)=>[
+                ...prevMessages,
+                data.messages,
+            ]);
         };
 
 
@@ -128,6 +135,19 @@ function RoomPage(){
         setSong(data);
     }
 
+    const sendMessage = ()=>{
+        if(!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN ||message.trim()=="")
+            {
+                return;
+            }
+        socketRef.current.send(
+            JSON.stringify({
+                type : "chat.message",
+                message:message,
+            })
+        );
+    }
+
     if(showSettings){
         return(
             <Grid container spacing={1}>
@@ -147,22 +167,37 @@ function RoomPage(){
 
 
     return (
-        <Box sx={{maxWidth:800, mx:40,mt:10,border:'1px dashed green',height:200}}>
-        <div>
-            <h3>Room code : {roomCode}</h3>
+        <Box sx={{maxWidth:900, mx:"auto",mt:6,px:2}}>
+        <Paper elevation={3} sx={{p:3, borderRadius: 3,}}>
+            <Stack spacing={2}>
+            <Typography variant="h5">Room code : {roomCode}</Typography>
             <MusicPlayer {...song} />
-            <p>Votes to Skip : {votesToSkip}</p>
-            <p>
-                Guest Can Pause : {guestCanPause.toString()}
-            </p>
-            <p>
-                Are You Host : {isHost.toString()}
-            </p>
+            <Paper variant="outlined" sx={{p:2,borderRadius:2,}}>
+            <Typography variant="body1">Votes to Skip : {votesToSkip}</Typography>
+            <Typography variant="body1">Guest Can Pause : {guestCanPause? "Yes" : "No"}</Typography>
+            <Typography variant="body1">Are You Host : {isHost ? "Yes" : "No"}</Typography>
+            </Paper>
+            <Stack direction="row" spacing={2}>
             {isHost?(
-            <Button variant="contained" color="success" size="small" sx={{ml:1}} onClick={showSettingPage}>Settings</Button>
+            <Button variant="contained" color="success" size="small" onClick={showSettingPage}>Settings</Button>
             ):null}
-            <Button variant="contained" color="info" size="small" sx={{ml:1}}onClick={leaveButton}>Leave Room</Button>
-        </div>
+            <Button variant="contained" color="info" size="small" onClick={leaveButton}>Leave Room</Button>
+            </Stack>     
+        </Stack>
+        </Paper>
+        <Paper elevation={3} sx={{mt: 3,p: 3,borderRadius: 3,}}>
+        <Typography variant="h5">
+        Let's Chat
+        </Typography>
+        <Paper variant="outlined" sx={{mt:2, height:300,p:2,overflow:"auto",}}>
+            {messages.map((msg,index)=>(
+                <Typography key={index} variant="body1">
+                    {msg}
+                </Typography>
+            ))}
+
+        </Paper>
+        </Paper>
         </Box>
     )
 }
