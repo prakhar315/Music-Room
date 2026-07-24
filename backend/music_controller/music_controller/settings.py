@@ -144,6 +144,14 @@ SESSION_COOKIE_HTTPONLY = True
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG":{
+            "hosts":[{
+                "host":"127.0.0.1",
+                "port": 6379,
+                "socket_timeout": None,
+                "retry_on_timeout": True,
+        }],
+        },
     },
 }
