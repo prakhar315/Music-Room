@@ -201,17 +201,13 @@ function RoomPage(){
                     {msg}
                 </Typography>
             ))}
-
         </Paper>
         <Stack direction="row" spacing={2}>
         <TextField 
         fullWidth placeholder="Type..." value={message} onChange={(e)=> setMessage(e.target.value)}
         />
-        <Button variant="contained" onClick={sendMessage}>send</Button>
-
-        
+        <Button variant="contained" onClick={sendMessage}>send</Button>   
         </Stack>
-
         </Paper>
         </Box>
     )
